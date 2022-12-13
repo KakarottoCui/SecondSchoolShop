@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+    <context:component-scan base-package="com.secondshop" />
+
+    <mvc:annotation-driven />
+
+    <!--静态资源映射-->
+    <mvc:resources mapping="/statics/**" location="/statics/"/>
+
+    <!-- 配置SpringMVC的视图解析器 -->
+    <!-- 其viewClass属性的默认值就是org.springframework.web.servlet.view.JstlView -->
+    <bean class="com.secondshop.exception.ExceptionHandler"></bean>
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean name="jacksonObjectMapper"
+          class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+        <property name="featuresToDisable">
+            <array>
+                <util:constant static-field="com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS" />
+            </array>
+        </property>
+    </bean>
+
+    <!-- 上传文件 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"/>
+        <!-- 最大内存大小 -->
+        <property name="maxInMemorySize" value="10240"/>
+        <!-- 最大文件大小，-1为不限制大小 -->
+        <property name="maxUploadSize" value="-1"/>
+    </bean>
+
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <bean
+                    class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="jacksonObjectMapper" />
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+</beans>

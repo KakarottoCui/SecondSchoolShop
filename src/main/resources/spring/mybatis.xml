@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+    <!--数据源-->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/secondshop?serverTimezone=Asia/Shanghai&amp;useUnicode=yes&amp;characterEncoding=UTF-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value=""/>
+        <property name="maxActive" value="10"/>
+        <property name="maxIdle" value="2"/>
+        <property name="maxWait" value="12000"/>
+    </bean>
+
+    <!-- transaction support-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- enable transaction annotation support -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- spring和MyBatis整合 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!--<property name="mapperLocations" value="classpath*:mappers/*.xml"/>-->
+        <property name="configuration">
+            <bean class="org.apache.ibatis.session.Configuration">
+                <property name="mapUnderscoreToCamelCase" value="true"/>
+                <property name="cacheEnabled" value="false"/>
+                <property name="lazyLoadingEnabled" value="false"/>
+                <property name="useGeneratedKeys" value="true"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <property name="basePackage" value="com.secondshop.mappers" />
+    </bean>
+
+    <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.secondshop.mappers.UserMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+    <bean id="goodMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.secondshop.mappers.GoodMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+    <bean id="firstTypeMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.secondshop.mappers.FirstTypeMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+    <bean id="secondTypeMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.secondshop.mappers.SecondTypeMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+    <bean id="reviewMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.secondshop.mappers.ReviewMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+    <bean id="imageMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.secondshop.mappers.ImageMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+    <bean id="orderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.secondshop.mappers.OrderMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+    <bean id="collectMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.secondshop.mappers.CollectMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+</beans>
