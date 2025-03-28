@@ -1,7 +1,7 @@
 # SecondSchoolShop
 基于java SSM框架的二手校园交易商城平台系统
 
-演示视频链接：https://live.csdn.net/v/262148
+演示视频链接：https://www.bilibili.com/video/BV1sP4y1D7mM/
 
 使用的技术
 
